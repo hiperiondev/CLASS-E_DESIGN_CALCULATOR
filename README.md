@@ -1,3 +1,7 @@
+<div align="center">
+
+[![Logo](https://github.com/hiperiondev/CLASS-E_DESIGN_CALCULATOR/raw/main/images/logo.png)](https://github.com/hiperiondev/CLASS-E_DESIGN_CALCULATOR)
+
 # Class-E RF Power Amplifier Design Calculator
 
 > **Excel/LibreOffice Calc spreadsheet for optimum Class-E switching amplifier design and harmonic Low-Pass Filter calculation — based on Sokal/Raab equations (WA1HQC · QEX Jan/Feb 2001)**
