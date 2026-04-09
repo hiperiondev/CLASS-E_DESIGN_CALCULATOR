@@ -1,6 +1,5 @@
 <div align="center">
-
-[![Logo](https://github.com/hiperiondev/CLASS-E_DESIGN_CALCULATOR/raw/main/images/logo.png)](https://github.com/hiperiondev/CLASS-E_DESIGN_CALCULATOR)
+<img src="https://github.com/hiperiondev/CLASS-E_DESIGN_CALCULATOR/raw/main/images/logo.png" width="500">
 
 # Class-E RF Power Amplifier Design Calculator
 
