@@ -11,6 +11,7 @@
 **File:** `ClassE_Amplifier_Calculator.xlsx`
 
 ---
+</div>
 
 ## Table of Contents
 
