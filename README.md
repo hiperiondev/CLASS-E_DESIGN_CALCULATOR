@@ -5,8 +5,8 @@
 
 > **Excel/LibreOffice Calc spreadsheet for optimum Class-E switching amplifier design and harmonic Low-Pass Filter calculation — based on Sokal/Raab equations (WA1HQC · QEX Jan/Feb 2001)**
 
-**Author:** LU3VEA — lu3vea@gmail.com  
-**Licence:** GPL v3  
+**Author:** Emiliano Gonzalez LU3VEA — lu3vea@gmail.com  
+**License:** GPL v3  
 **File:** `ClassE_Amplifier_Calculator.xlsx`
 
 ---
