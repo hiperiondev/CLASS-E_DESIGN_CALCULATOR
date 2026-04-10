@@ -19,7 +19,7 @@
 3. [Spreadsheet Structure](#3-spreadsheet-structure)
 4. [Theory Background](#4-theory-background)
    - [Class-E Operating Principle](#41-class-e-operating-principle)
-   - [ZVS and ZVDS Conditions](#42-zvs-and-zvds-conditions)
+   - [ZVS and ZDVS Conditions](#42-zvs-and-zdvs-conditions)
    - [Sokal/Raab Design Equations](#43-sokalraab-design-equations)
    - [Low-Pass Filter Theory](#44-low-pass-filter-theory)
 5. [Quick Start](#5-quick-start)
@@ -102,19 +102,22 @@ The workbook contains **four sheets**:
 The classic Class-E amplifier (Sokal Fig. 2) consists of:
 
 ```
-Vcc ──── RFC ──┬──── Drain (SW) ──┬──── L2 ──── C2 ──── R (load)
-               │                  │
-              [RFC]               C1
-               │                  │
-              GND                GND
+Vcc ──── RFC ──────────────────────┬──── L2 ──── C2 ──── R (load)
+                                   │ ← Drain node
+                             ┌─────┤
+                            [SW]   C1
+                             │     │
+                            GND   GND
 ```
+
+> **Note:** `SW` (the MOSFET) and `C1` are both connected between the **Drain node** and GND. `RFC` connects Vcc to the Drain node in series only — it does **not** appear as a shunt component.
 
 - **RFC** (RF choke): presents very high impedance at the operating frequency so the DC supply current flows with minimal RF ripple
 - **C1** (shunt capacitor, drain to GND): shapes the drain voltage waveform; absorbs MOSFET Coss
 - **L2–C2** (series resonant network): forms a bandpass that passes only the fundamental to the load while filtering harmonics
 - **R** (optimum load resistance): calculated from Vcc, P_out, and η; differs from antenna impedance (50 Ω) — hence the need for a matching network or LPF impedance transformation
 
-### 4.2 ZVS and ZVDS Conditions
+### 4.2 ZVS and ZDVS Conditions
 
 For **Zero Voltage Switching (ZVS)**, the transistor must turn on when its drain-to-source voltage is exactly zero:
 
@@ -122,13 +125,13 @@ For **Zero Voltage Switching (ZVS)**, the transistor must turn on when its drain
 V_ds(t_on) = 0
 ```
 
-For **Zero Voltage Derivative Switching (ZVDS)**, the slope of the drain voltage must also be zero at turn-on:
+For **Zero Derivative Voltage Switching (ZDVS)** — also written ZDS or ZVDS in some literature — the slope of the drain voltage must also be zero at turn-on:
 
 ```
 dV_ds/dt|_(t_on) = 0
 ```
 
-When both conditions are met simultaneously (optimum Class-E), the transistor dissipates no power when switching, yielding maximum efficiency. Any deviation from the optimum (wrong component values, frequency error, load mismatch) violates ZVS/ZVDS and rapidly degrades efficiency.
+When both conditions are met simultaneously (optimum Class-E), the transistor dissipates no power when switching, yielding maximum efficiency. Any deviation from the optimum (wrong component values, frequency error, load mismatch) violates ZVS/ZDVS and rapidly degrades efficiency.
 
 ### 4.3 Sokal/Raab Design Equations
 
@@ -235,11 +238,15 @@ In the **Class-E Calculator** sheet, edit the blue **INPUT PARAMETERS** cells:
 | Q_L | Loaded Q factor | 5 |
 | Vo | Transistor Vsat (0 for MOSFET) | 0 |
 | ESR_L2 | L2 winding ESR (Ω) | 0.05 |
+| ESR_C2 | C2 series ESR (Ω) | 0.01 |
+| ESR_C1 | C1 series ESR (Ω) | 0.01 |
 | ESR_RFC | RFC winding ESR (Ω) | 0.1 |
 | Z_out | Antenna/load impedance (Ω) | 50 |
 | Ciss | MOSFET Ciss from datasheet (pF) | 60 |
 | Coss | MOSFET Coss from datasheet (pF) | 12 |
 | C_oss scale | Bias-point scale factor | 0.4 |
+
+> **Note on ESR_C1 and ESR_C2:** These capacitor ESR values feed directly into the Sokal efficiency formula (Section 4.3). For NP0/C0G capacitors, typical values are 0.01–0.05 Ω and are often negligible. For X7R or other lossy dielectrics, ESR can reach 0.1–0.5 Ω and must be measured. Setting them to 0 is acceptable for initial estimates with low-ESR capacitors.
 
 ### Step 3 — Converge the Iteration
 
@@ -305,6 +312,9 @@ The saturation voltage of the switching device:
 The winding series resistance of the L2 inductor, measured at the operating frequency with an LCR meter or VNA. This parameter enters the Sokal efficiency equation with coefficient 1.0 — errors here directly corrupt η, R, C1, C2, and I_dc. Typical values:
 - Small air-core solenoid: 0.03–0.08 Ω
 - Wound toroid (HF): 0.05–0.15 Ω
+
+### ESR_C2 and ESR_C1
+The series resistance of the resonant capacitor C2 and shunt capacitor C1, respectively. These values enter the Sokal efficiency equation directly (ESR_C2 with coefficient 1.0; ESR_C1 with coefficient 0.2116). For NP0/C0G or silver-mica types, ESR is typically 0.01–0.05 Ω and can be left at 0.01 for initial design. Lossy dielectrics (X7R, Z5U) can have ESR of 0.1–0.5 Ω — measure with VNA if efficiency accuracy matters.
 
 ### ESR_RFC
 The winding series resistance of the RF choke. RFC loss is approximately `ESR_RFC × I_dc²`. Typical values:
@@ -618,7 +628,7 @@ For compliance at high power or strict IARU compliance, consider:
 
 ## 16. Simulation Workflow (LTspice)
 
-LTspice (free from Analog Devices: https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html) is the recommended tool for pre-build validation.
+LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) is the recommended tool for pre-build validation. *(Note: if the URL above redirects, search "LTspice download Analog Devices" to find the current download page.)*
 
 ### Basic simulation model
 
@@ -647,6 +657,7 @@ LTspice (free from Analog Devices: https://www.analog.com/en/design-center/desig
 - **Coss is Vds-dependent**. The scale factor approach is an approximation. For best accuracy, use manufacturer-specified Coss,er (energy-equivalent) or measure at Vds ≈ 0.5×Vcc
 - The calculator assumes **D = 0.5 (50% duty cycle)**, which is required for the Sokal equations. Non-50% duty cycle designs require different equations not implemented here
 - The calculator is valid for **QL ≥ 1.7879** (lower bound of Sokal Table I rational fit). QL < 1.79 is outside the valid design space for optimum Class-E
+- The **ZVS/ZDVS conditions** can be violated at high impedance ratios (Z_load/R_opt > 10). Always verify with LTspice simulation when R_opt is very low (< 5 Ω)
 
 ---
 
@@ -673,6 +684,10 @@ LTspice (free from Analog Devices: https://www.analog.com/en/design-center/desig
 10. **RF Cafe — Chebyshev Prototype Element Values** — Tables of normalised Chebyshev g-values. Available: https://www.rfcafe.com/references/electrical/cheby-proto-values.htm
 
 11. **Engineering LibreTexts — Chebyshev Lowpass Approximation** — Theoretical background. Available: https://eng.libretexts.org/Bookshelves/Electrical_Engineering/Electronics/Microwave_and_RF_Design_IV:_Modules_(Steer)/02:_Filters/2.05:_The_Chebyshev_Lowpass_Approximation
+
+12. **Kazimierczuk, M. K.** — *RF Power Amplifiers*, 2nd ed., Wiley, 2015. *(Comprehensive textbook covering Class-E theory, ZVS/ZDVS conditions, and MOSFET parasitic effects at RF frequencies)*
+
+13. **Kee, S. D., Aoki, I., Hajimiri, A., and Rutledge, D.** — "The Class-E/F Family of ZVS Switching Amplifiers," *IEEE Transactions on Microwave Theory and Techniques*, Vol. 51, No. 6, pp. 1677–1690, June 2003. *(Extends the Class-E theory to Class-E/F topologies; useful background for harmonic tuning)*
 
 ---
 
