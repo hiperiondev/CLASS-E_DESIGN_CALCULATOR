@@ -89,8 +89,8 @@ The workbook contains **four sheets**:
 | Sheet | Purpose |
 |---|---|
 | **Class-E Calculator** | Main design sheet. Enter parameters here; get all component values. |
-| **LPF Direct (R\_opt)** | 5-element Chebyshev LPF designed at the actual drain impedance R_opt. Linked automatically to the main sheet. |
-| **LPF Direct 7-pole** | 7-element Chebyshev LPF designed at R_opt for ≥14 dB additional stopband rejection vs. the 5-pole design. Linked automatically to the main sheet. |
+| **LPF Direct 5-poles** | 5-element Chebyshev LPF designed at the actual drain impedance R_opt. Linked automatically to the main sheet. |
+| **LPF Direct 7-poles** | 7-element Chebyshev LPF designed at R_opt for ≥14 dB additional stopband rejection vs. the 5-pole design. Linked automatically to the main sheet. |
 | **MOSFET Reference Table** | Datasheet parameters for 16 common MOSFETs used in HF Class-E designs. |
 
 ---
