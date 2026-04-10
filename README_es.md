@@ -26,7 +26,7 @@
 6. [Parámetros de Entrada Explicados](#6-parámetros-de-entrada-explicados)
 7. [Salidas / Valores Calculados](#7-salidas--valores-calculados)
 8. [Hoja 1 — Calculadora Clase-E](#8-hoja-1--calculadora-clase-e)
-9. [Hoja 2 — LPF Directo (R_opt)](#9-hoja-2--lpf-directo-r_opt)
+9. [Hoja 2 — LPF Directo 5 Polos](#9-hoja-2--lpf-directo-r_opt)
 10. [Hoja 3 — LPF Directo 7 Polos](#10-hoja-3--lpf-directo-7-polos)
 11. [Hoja 4 — Tabla de Referencia de MOSFETs](#11-hoja-4--tabla-de-referencia-de-mosfets)
 12. [Cálculo Iterativo: Por Qué y Cómo](#12-cálculo-iterativo-por-qué-y-cómo)
@@ -405,7 +405,7 @@ Esta es la hoja de diseño principal. El diseño está dividido en secciones:
 
 ---
 
-## 9. Hoja 2 — LPF Directo (R_opt)
+## 9. Hoja 2 — LPF Directo 5 Polos
 
 Esta hoja calcula el LPF Chebyshev **correcto** de 5 elementos cuando el filtro está conectado **directamente al drenador**, sin red L intermedia. Todos los parámetros están automáticamente vinculados desde la hoja principal.
 
