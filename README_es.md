@@ -89,7 +89,7 @@ El libro de trabajo contiene **cuatro hojas**:
 | Hoja | Propósito |
 |---|---|
 | **Calculadora Clase-E** | Hoja de diseño principal. Ingrese parámetros aquí; obtenga todos los valores de componentes. |
-| **LPF Directo (R\_opt)** | LPF Chebyshev de 5 elementos diseñado a la impedancia de drenador real R_opt. Vinculado automáticamente a la hoja principal. |
+| **LPF Directo 5 polos** | LPF Chebyshev de 5 elementos diseñado a la impedancia de drenador real R_opt. Vinculado automáticamente a la hoja principal. |
 | **LPF Directo 7 polos** | LPF Chebyshev de 7 elementos diseñado a R_opt para ≥14 dB de rechazo adicional en la banda de supresión vs. el diseño de 5 polos. Vinculado automáticamente a la hoja principal. |
 | **Tabla de Referencia de MOSFET** | Parámetros de hoja de datos para 16 MOSFETs comunes usados en diseños Clase-E HF. |
 
