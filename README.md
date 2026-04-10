@@ -26,8 +26,8 @@
 6. [Input Parameters Explained](#6-input-parameters-explained)
 7. [Output / Calculated Values](#7-output--calculated-values)
 8. [Sheet 1 — Class-E Calculator](#8-sheet-1--class-e-calculator)
-9. [Sheet 2 — LPF Direct (R_opt)](#9-sheet-2--lpf-direct-r_opt)
-10. [Sheet 3 — LPF Direct 7-pole](#10-sheet-3--lpf-direct-7-pole)
+9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-r_opt)
+10. [Sheet 3 — LPF Direct 7-poles](#10-sheet-3--lpf-direct-7-pole)
 11. [Sheet 4 — MOSFET Reference Table](#11-sheet-4--mosfet-reference-table)
 12. [Iterative Calculation: Why & How](#12-iterative-calculation-why--how)
 13. [Component Selection Guidelines](#13-component-selection-guidelines)
@@ -405,7 +405,7 @@ This is the main design sheet. The layout is divided into sections:
 
 ---
 
-## 9. Sheet 2 — LPF Direct (R_opt)
+## 9. Sheet 2 — LPF Direct 5-poles
 
 This sheet computes the **correct** 5-element Chebyshev LPF when the filter is connected **directly to the drain**, with no intermediate L-network. All parameters are automatically linked from the main sheet.
 
@@ -442,7 +442,7 @@ If the 5-element LPF fails the regulatory requirement (FCC −43 dBc, IARU −50
 
 ---
 
-## 10. Sheet 3 — LPF Direct 7-pole
+## 10. Sheet 3 — LPF Direct 7-poles
 
 This sheet computes a **7-element Chebyshev LPF** directly coupled to the drain, using R_opt as the source impedance. It provides approximately 14 dB more stopband rejection than the 5-pole design, targeting −65 dBc or better at 2f for strict IARU compliance. All parameters are automatically linked from the main sheet.
 
