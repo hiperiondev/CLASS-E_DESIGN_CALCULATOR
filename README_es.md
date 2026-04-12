@@ -26,7 +26,7 @@
 6. [Parámetros de Entrada Explicados](#6-parámetros-de-entrada-explicados)
 7. [Salidas / Valores Calculados](#7-salidas--valores-calculados)
 8. [Hoja 1 — Calculadora Clase-E](#8-hoja-1--calculadora-clase-e)
-9. [Hoja 2 — LPF Directo 5 Polos](#9-hoja-2--lpf-directo-r_opt)
+9. [Hoja 2 — LPF Directo 5 Polos](#9-hoja-2--lpf-directo-5-polos)
 10. [Hoja 3 — LPF Directo 7 Polos](#10-hoja-3--lpf-directo-7-polos)
 11. [Hoja 4 — Tabla de Referencia de MOSFETs](#11-hoja-4--tabla-de-referencia-de-mosfets)
 12. [Cálculo Iterativo: Por Qué y Cómo](#12-cálculo-iterativo-por-qué-y-cómo)
@@ -47,7 +47,7 @@
 
 ## 1. ¿Qué es un Amplificador Clase-E?
 
-Un **amplificador de potencia Clase-E** es una topología de amplificador RF de potencia de **conmutación (no lineal) de extremo simple** y alta eficiencia. Fue inventado por Nathan O. Sokal (WA1HQC) y Alan D. Sokal, descrito por primera vez en su landmark paper de 1975 en el *IEEE Journal of Solid-State Circuits* ("Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers"), y perfeccionado posteriormente con ecuaciones de diseño prácticas en el artículo *QEX* de Sokal de 2001.
+Un **amplificador de potencia Clase-E** es una topología de amplificador RF de potencia de **conmutación (no lineal) de extremo simple** y alta eficiencia. Fue inventado por Nathan O. Sokal (WA1HQC) y Alan D. Sokal, descrito por primera vez en su artículo fundamental de 1975 en el *IEEE Journal of Solid-State Circuits* ("Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers"), y perfeccionado posteriormente con ecuaciones de diseño prácticas en el artículo *QEX* de Sokal de 2001.
 
 A diferencia de los amplificadores lineales (Clase A, AB, B), donde el dispositivo activo opera en su región lineal y disipa potencia significativa, un amplificador Clase-E opera su transistor como un **interruptor duro** — el dispositivo está completamente ENCENDIDO o completamente APAGADO. Bajo condiciones óptimas ideales (ZVS + ZCS), la tensión del interruptor es cero en el momento de encendido y la pendiente de la tensión también es cero en ese instante, lo que significa que **no se disipa energía almacenada en el capacitor de salida**. Esto hace que la eficiencia de drenador teórica se aproxime al **100%**, con eficiencias prácticas de 80–95% logradas de manera rutinaria en diseños HF QRP.
 
@@ -151,7 +151,7 @@ donde `Veff = Vcc − Vsat` (excursión de tensión efectiva).
 C1 = [poli-QL / (5,4466 × ω × R)] + 0,6 / (ω² × L_RFC)
 ```
 
-El término `+0,6/(ω²·L_RFC)` es la corrección del RFC — está vinculado dinámicamente al valor del RFC en la hoja, no es un desplazamiento fijo.
+donde `poli-QL` es el factor de corrección polinomial dependiente de QL de la Ec. 7 de Sokal. El término `+0,6/(ω²·L_RFC)` es la corrección del RFC — está vinculado dinámicamente al valor del RFC en la hoja, no es un desplazamiento fijo.
 
 **C2 — Capacitor Resonante Serie (Ec. 9, ajuste racional ±0,072%):**
 
@@ -172,7 +172,7 @@ Esta es la bobina física a devanar. `L_ser = L2 − 1/(ω²·C2)` es el exceso 
 **Modelo de Eficiencia (Sokal Ec. 2, extendido para pérdidas en componentes reales):**
 
 ```
-η = R / [R + ESR_L2 + ESR_C2 + 1,365 × Ron + 0,2116 × ESR_C1 + (ESR_RFC × I_dc²)/P_out_term]
+η = R / [R + ESR_L2 + ESR_C2 + 1,365 × Ron + 0,2116 × ESR_C1 + (ESR_RFC × I_dc²)/P_out]
 ```
 
 η retroalimenta a I_dc = P_out/(Vcc × η), creando la dependencia circular resuelta por cálculo iterativo.
@@ -250,7 +250,7 @@ En la hoja **Calculadora Clase-E**, edite las celdas azules de **PARÁMETROS DE 
 
 ### Paso 3 — Converger la Iteración
 
-Presione **F9** repetidamente (o Shift+F9 en algunas versiones) hasta que el indicador de convergencia en la celda C6 muestre:
+Presione **F9** repetidamente (F9 recalcula todo el libro; Shift+F9 recalcula solo la hoja activa) hasta que el indicador de convergencia en la celda C6 muestre:
 
 ```
 ✅ Cálculo iterativo CONVERGIDO — valores estables
@@ -381,7 +381,7 @@ La inductancia mínima de la bobina es:
 RFC_min = 30 × R / ω
 ```
 La hoja usa `50 × R / ω` en la práctica para margen. Verificaciones críticas:
-- **La FRA (frecuencia de auto-resonancia) debe ser > 10× la frecuencia de operación** — en HF, un RFC grande puede auto-resonar dentro de la banda y actuar como un capacitor
+- **La FRA (frecuencia de auto-resonancia) debe ser > 10× la frecuencia de operación** — en HF, un RFC grande puede auto-resonar dentro de la banda y actuar como capacitor
 - **Saturación del núcleo** — verifique que el núcleo no se sature a I_dc
 
 ---
@@ -543,7 +543,7 @@ Esta referencia circular no puede resolverse en un solo paso — requiere iterac
 
 ### Por qué converge
 
-El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña fracción de P_out para circuitos HF QRP bien diseñados. La ganancia de retroalimentación es mucho menor que 1, por lo que la iteración siempre converge. Si no converge, verifique que ESR_RFC no sea unrealísticamente grande.
+El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña fracción de P_out para circuitos HF QRP bien diseñados. La ganancia de retroalimentación es mucho menor que 1, por lo que la iteración siempre converge. Si no converge, verifique que ESR_RFC no sea excesivamente grande.
 
 ---
 
@@ -574,7 +574,7 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 ### 13.4 RFC — Bobina de RF
 
 - **Requisito crítico:** FRA > 10× la frecuencia de operación (p.ej. >70 MHz para un diseño de 7 MHz)
-- **Núcleo:** La ferrita mezcla 43 o 61 funciona bien en HF; evite el polvo de hierro para valores RFC grandes (demasiado con pérdidas)
+- **Núcleo:** La ferrita mezcla 43 o 61 funciona bien en HF; evite el polvo de hierro para valores RFC grandes (demasiado pérdidas a estas frecuencias)
 - **Q de devanado:** Apunte a Q sin carga > 100 a la frecuencia de operación
 - **Saturación:** El núcleo no debe saturarse a la corriente de polarización DC I_dc; verifique los valores AL del fabricante
 - **Regla práctica:** La reactancia del RFC debe ser ≥ 30× R; esta planilla usa 50× R para margen
@@ -688,6 +688,10 @@ LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-
 12. **Kazimierczuk, M. K.** — *RF Power Amplifiers*, 2ª ed., Wiley, 2015. *(Libro de texto exhaustivo que cubre la teoría Clase-E, condiciones ZVS/ZDVS y efectos parásitos del MOSFET a frecuencias RF)*
 
 13. **Kee, S. D., Aoki, I., Hajimiri, A., y Rutledge, D.** — "The Class-E/F Family of ZVS Switching Amplifiers," *IEEE Transactions on Microwave Theory and Techniques*, Vol. 51, No. 6, pp. 1677–1690, Junio 2003. *(Extiende la teoría Clase-E a topologías Clase-E/F; útil como fondo para sintonización de armónicos)*
+
+14. **Kazimierczuk, M. K. y Puczko, K.** — "Exact Analysis of Class E Tuned Power Amplifier at any Q and Switch Duty Cycle," *IEEE Transactions on Circuits and Systems*, Vol. CAS-34, No. 2, pp. 149–159, Febrero 1987. *(Análisis exacto en forma cerrada sin la suposición de Q infinito; útil cuando QL < 5)*
+
+15. **Wetherhold, E. (W3NQN)** — "Second-Harmonic-Optimized Low-Pass Filters," *QST*, Febrero 1999, pp. 44–48. American Radio Relay League. *(Introduce la topología CWAZ Chebyshev con cero; contexto para elegir entre LPF estándar de 50 Ω y conexión directa al drenador)*
 
 ---
 

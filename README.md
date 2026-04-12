@@ -26,7 +26,7 @@
 6. [Input Parameters Explained](#6-input-parameters-explained)
 7. [Output / Calculated Values](#7-output--calculated-values)
 8. [Sheet 1 — Class-E Calculator](#8-sheet-1--class-e-calculator)
-9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-r_opt)
+9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-5-poles)
 10. [Sheet 3 — LPF Direct 7-poles](#10-sheet-3--lpf-direct-7-pole)
 11. [Sheet 4 — MOSFET Reference Table](#11-sheet-4--mosfet-reference-table)
 12. [Iterative Calculation: Why & How](#12-iterative-calculation-why--how)
@@ -151,7 +151,7 @@ where `Veff = Vcc − Vsat` (effective voltage swing).
 C1 = [QL-poly / (5.4466 × ω × R)] + 0.6 / (ω² × L_RFC)
 ```
 
-The `+0.6/(ω²·L_RFC)` term is the RFC correction — it is dynamically linked to the RFC value in the sheet, not a fixed offset.
+where `QL-poly` is the QL-dependent polynomial correction factor from Sokal Eq. 7. The `+0.6/(ω²·L_RFC)` term is the RFC correction — it is dynamically linked to the RFC value in the sheet, not a fixed offset.
 
 **C2 — Series Resonant Capacitor (Eq. 9, rational fit ±0.072%):**
 
@@ -172,7 +172,7 @@ This is the physical coil to wind. `L_ser = L2 − 1/(ω²·C2)` is the net indu
 **Efficiency Model (Sokal Eq. 2, extended for real component losses):**
 
 ```
-η = R / [R + ESR_L2 + ESR_C2 + 1.365 × Ron + 0.2116 × ESR_C1 + (ESR_RFC × I_dc²)/P_out_term]
+η = R / [R + ESR_L2 + ESR_C2 + 1.365 × Ron + 0.2116 × ESR_C1 + (ESR_RFC × I_dc²)/P_out]
 ```
 
 η feeds back into I_dc = P_out/(Vcc × η), creating the circular dependency resolved by iterative calculation.
@@ -250,7 +250,7 @@ In the **Class-E Calculator** sheet, edit the blue **INPUT PARAMETERS** cells:
 
 ### Step 3 — Converge the Iteration
 
-Press **F9** repeatedly (or Shift+F9 in some versions) until the convergence indicator in cell C6 shows:
+Press **F9** repeatedly (F9 recalculates the whole workbook; Shift+F9 recalculates only the active sheet) until the convergence indicator in cell C6 shows:
 
 ```
 ✅ Iterative calc CONVERGED — values stable
@@ -688,6 +688,10 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 12. **Kazimierczuk, M. K.** — *RF Power Amplifiers*, 2nd ed., Wiley, 2015. *(Comprehensive textbook covering Class-E theory, ZVS/ZDVS conditions, and MOSFET parasitic effects at RF frequencies)*
 
 13. **Kee, S. D., Aoki, I., Hajimiri, A., and Rutledge, D.** — "The Class-E/F Family of ZVS Switching Amplifiers," *IEEE Transactions on Microwave Theory and Techniques*, Vol. 51, No. 6, pp. 1677–1690, June 2003. *(Extends the Class-E theory to Class-E/F topologies; useful background for harmonic tuning)*
+
+14. **Kazimierczuk, M. K. and Puczko, K.** — "Exact Analysis of Class E Tuned Power Amplifier at any Q and Switch Duty Cycle," *IEEE Transactions on Circuits and Systems*, Vol. CAS-34, No. 2, pp. 149–159, February 1987. *(Exact closed-form analysis without the infinite-Q assumption; useful when QL < 5)*
+
+15. **Wetherhold, E. (W3NQN)** — "Second-Harmonic-Optimized Low-Pass Filters," *QST*, February 1999, pp. 44–48. American Radio Relay League. *(Introduces the Chebyshev-with-a-zero CWAZ topology; context for choosing standard 50 Ω vs. direct-drain LPF approaches)*
 
 ---
 
