@@ -27,7 +27,7 @@
 7. [Output / Calculated Values](#7-output--calculated-values)
 8. [Sheet 1 — Class-E Calculator](#8-sheet-1--class-e-calculator)
 9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-5-poles)
-10. [Sheet 3 — LPF Direct 7-poles](#10-sheet-3--lpf-direct-7-pole)
+10. [Sheet 3 — LPF Direct 7-poles](#10-sheet-3--lpf-direct-7-poles)
 11. [Sheet 4 — MOSFET Reference Table](#11-sheet-4--mosfet-reference-table)
 12. [Iterative Calculation: Why & How](#12-iterative-calculation-why--how)
 13. [Component Selection Guidelines](#13-component-selection-guidelines)
@@ -49,10 +49,10 @@
 
 A **Class-E power amplifier** is a highly efficient single-ended **switching (non-linear) RF power amplifier** topology. It was invented by Nathan O. Sokal (WA1HQC) and Alan D. Sokal, first described in their landmark 1975 paper in the *IEEE Journal of Solid-State Circuits* ("Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers"), and later refined with practical design equations in Sokal's 2001 *QEX* article.
 
-Unlike linear amplifiers (Class A, AB, B), where the active device operates in its linear region and dissipates significant power, a Class-E amplifier operates its transistor as a **hard switch** — the device is either fully ON or fully OFF. Under ideal optimum (ZVS + ZCS) conditions, the switch voltage is zero at turn-on and the voltage slope is also zero at that instant, meaning **no energy stored in the output capacitor is wastefully dissipated**. This makes theoretical drain efficiency approach **100%**, with practical efficiencies of 80–95% routinely achievable in HF QRP designs.
+Unlike linear amplifiers (Class A, AB, B), where the active device operates in its linear region and dissipates significant power, a Class-E amplifier operates its transistor as a **hard switch** — the device is either fully ON or fully OFF. Under ideal optimum (ZVS + ZDVS) conditions, the switch voltage is zero at turn-on and the voltage slope is also zero at that instant, meaning **no energy stored in the output capacitor is wastefully dissipated**. This makes theoretical drain efficiency approach **100%**, with practical efficiencies of 80–95% routinely achievable in HF QRP designs.
 
 Key characteristics:
-- Optimum switching topology (ZVS + ZCS)
+- Optimum switching topology (ZVS + ZDVS)
 - Theoretical efficiency → 100%; practical: 80–95%
 - Peak drain voltage ≈ 3.56 × Vcc (must be within MOSFET V_DSS rating)
 - Best suited for single-frequency CW/WSPR/data transmitters
@@ -665,7 +665,7 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 
 1. **Sokal, N. O.** — "Class-E RF Power Amplifiers," *QEX Magazine*, No. 204, Jan/Feb 2001, pp. 9–20. American Radio Relay League. *(Primary reference for all design equations in this calculator)*
 
-2. **Sokal, N. O.** — "Class-E High-Efficiency RF/Microwave Power Amplifiers: Principles of Operation, Design Procedures, and Experimental Verification," in *Analog Circuit Design* (AACD 2001), Kluwer Academic, 2003. Available: https://people.eecs.berkeley.edu/~culler/AIIT/papers/radio/Sokal%20AACD5-poweramps.pdf
+2. **Sokal, N. O.** — "Class-E High-Efficiency RF/Microwave Power Amplifiers: Principles of Operation, Design Procedures, and Experimental Verification," in *Analog Circuit Design* (AACD 2001), Kluwer Academic, 2002. Available: https://people.eecs.berkeley.edu/~culler/AIIT/papers/radio/Sokal%20AACD5-poweramps.pdf
 
 3. **Sokal, N. O. and Sokal, A. D.** — "Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers," *IEEE Journal of Solid-State Circuits*, Vol. SC-10, No. 3, pp. 168–176, June 1975. *(Original patent/publication of the Class-E topology)*
 

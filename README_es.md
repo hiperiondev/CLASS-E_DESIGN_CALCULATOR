@@ -49,10 +49,10 @@
 
 Un **amplificador de potencia Clase-E** es una topología de amplificador RF de potencia de **conmutación (no lineal) de extremo simple** y alta eficiencia. Fue inventado por Nathan O. Sokal (WA1HQC) y Alan D. Sokal, descrito por primera vez en su artículo fundamental de 1975 en el *IEEE Journal of Solid-State Circuits* ("Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers"), y perfeccionado posteriormente con ecuaciones de diseño prácticas en el artículo *QEX* de Sokal de 2001.
 
-A diferencia de los amplificadores lineales (Clase A, AB, B), donde el dispositivo activo opera en su región lineal y disipa potencia significativa, un amplificador Clase-E opera su transistor como un **interruptor duro** — el dispositivo está completamente ENCENDIDO o completamente APAGADO. Bajo condiciones óptimas ideales (ZVS + ZCS), la tensión del interruptor es cero en el momento de encendido y la pendiente de la tensión también es cero en ese instante, lo que significa que **no se disipa energía almacenada en el capacitor de salida**. Esto hace que la eficiencia de drenador teórica se aproxime al **100%**, con eficiencias prácticas de 80–95% logradas de manera rutinaria en diseños HF QRP.
+A diferencia de los amplificadores lineales (Clase A, AB, B), donde el dispositivo activo opera en su región lineal y disipa potencia significativa, un amplificador Clase-E opera su transistor como un **interruptor duro** — el dispositivo está completamente ENCENDIDO o completamente APAGADO. Bajo condiciones óptimas ideales (ZVS + ZDVS), la tensión del interruptor es cero en el momento de encendido y la pendiente de la tensión también es cero en ese instante, lo que significa que **no se disipa energía almacenada en el capacitor de salida**. Esto hace que la eficiencia de drenador teórica se aproxime al **100%**, con eficiencias prácticas de 80–95% logradas de manera rutinaria en diseños HF QRP.
 
 Características clave:
-- Topología de conmutación óptima (ZVS + ZCS)
+- Topología de conmutación óptima (ZVS + ZDVS)
 - Eficiencia teórica → 100%; práctica: 80–95%
 - Tensión de pico de drenador ≈ 3,56 × Vcc (debe estar dentro del límite V_DSS del MOSFET)
 - Más adecuado para transmisores CW/WSPR/datos de frecuencia única
@@ -665,7 +665,7 @@ LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-
 
 1. **Sokal, N. O.** — "Class-E RF Power Amplifiers," *QEX Magazine*, No. 204, Ene/Feb 2001, pp. 9–20. American Radio Relay League. *(Referencia primaria para todas las ecuaciones de diseño en esta calculadora)*
 
-2. **Sokal, N. O.** — "Class-E High-Efficiency RF/Microwave Power Amplifiers: Principles of Operation, Design Procedures, and Experimental Verification," en *Analog Circuit Design* (AACD 2001), Kluwer Academic, 2003. Disponible: https://people.eecs.berkeley.edu/~culler/AIIT/papers/radio/Sokal%20AACD5-poweramps.pdf
+2. **Sokal, N. O.** — "Class-E High-Efficiency RF/Microwave Power Amplifiers: Principles of Operation, Design Procedures, and Experimental Verification," en *Analog Circuit Design* (AACD 2001), Kluwer Academic, 2002. Disponible: https://people.eecs.berkeley.edu/~culler/AIIT/papers/radio/Sokal%20AACD5-poweramps.pdf
 
 3. **Sokal, N. O. y Sokal, A. D.** — "Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers," *IEEE Journal of Solid-State Circuits*, Vol. SC-10, No. 3, pp. 168–176, Junio 1975. *(Publicación original de la topología Clase-E)*
 
