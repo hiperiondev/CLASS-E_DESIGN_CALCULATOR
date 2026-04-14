@@ -143,7 +143,7 @@ La calculadora implementa las **ecuaciones de forma cerrada del AACD 2001 de Sok
 R = (Veff² / P_out) × 0,576801 × (1,0000086 − 0,414395/QL − 0,577501/QL² + 0,205967/QL³)
 ```
 
-donde `Veff = Vcc − Vsat` (excursión de tensión efectiva).
+donde `Veff = Vcc − ΔV − Vsat` (excursión de tensión efectiva; ΔV es la caída de tensión en el cableado de alimentación, típicamente 0 V).
 
 **C1 — Capacitor de Derivación (Ec. 7, corregido por QL):**
 
@@ -241,6 +241,7 @@ En la hoja **Calculadora Clase-E**, edite las celdas azules de **PARÁMETROS DE 
 | ESR_C2 | ESR serie del capacitor C2 (Ω) | 0,01 |
 | ESR_C1 | ESR serie del capacitor C1 (Ω) | 0,01 |
 | ESR_RFC | ESR del bobinado RFC (Ω) | 0,1 |
+| Z_in | Impedancia de fuente/excitador (Ω) | 50 |
 | Z_out | Impedancia de antena/carga (Ω) | 50 |
 | Ciss | Ciss del MOSFET de la hoja de datos (pF) | 60 |
 | Coss | Coss del MOSFET de la hoja de datos (pF) | 12 |
@@ -357,7 +358,7 @@ Nota: Bajo desajuste severo, V_pk puede alcanzar 5× Vcc. La hoja incluye una ve
 Usado internamente en todas las fórmulas de componentes.
 
 ### Resistencia de Carga Óptima R
-La impedancia de carga del drenador Clase-E para la que el circuito logra ZVS + ZCS. Esta **no** es la impedancia de antena (50 Ω) — es la impedancia de fuente correcta para el LPF. Típica: 5–50 Ω para HF QRP.
+La impedancia de carga del drenador Clase-E para la que el circuito logra ZVS + ZDVS. Esta **no** es la impedancia de antena (50 Ω) — es la impedancia de fuente correcta para el LPF. Típica: 5–50 Ω para HF QRP.
 
 ### Corriente DC de Alimentación I_dc
 ```
@@ -574,7 +575,7 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 ### 13.4 RFC — Bobina de RF
 
 - **Requisito crítico:** FRA > 10× la frecuencia de operación (p.ej. >70 MHz para un diseño de 7 MHz)
-- **Núcleo:** La ferrita mezcla 43 o 61 funciona bien en HF; evite el polvo de hierro para valores RFC grandes (demasiado pérdidas a estas frecuencias)
+- **Núcleo:** La ferrita mezcla 43 o 61 funciona bien en HF; evite el polvo de hierro para valores RFC grandes (demasiadas pérdidas a estas frecuencias)
 - **Q de devanado:** Apunte a Q sin carga > 100 a la frecuencia de operación
 - **Saturación:** El núcleo no debe saturarse a la corriente de polarización DC I_dc; verifique los valores AL del fabricante
 - **Regla práctica:** La reactancia del RFC debe ser ≥ 30× R; esta planilla usa 50× R para margen

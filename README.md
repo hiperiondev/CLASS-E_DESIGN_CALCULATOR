@@ -27,7 +27,7 @@
 7. [Output / Calculated Values](#7-output--calculated-values)
 8. [Sheet 1 — Class-E Calculator](#8-sheet-1--class-e-calculator)
 9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-5-poles)
-10. [Sheet 3 — LPF Direct 7-poles](#10-sheet-3--lpf-direct-7-poles)
+10. [Sheet 3 — LPF Direct 7-pole](#10-sheet-3--lpf-direct-7-pole)
 11. [Sheet 4 — MOSFET Reference Table](#11-sheet-4--mosfet-reference-table)
 12. [Iterative Calculation: Why & How](#12-iterative-calculation-why--how)
 13. [Component Selection Guidelines](#13-component-selection-guidelines)
@@ -90,7 +90,7 @@ The workbook contains **four sheets**:
 |---|---|
 | **Class-E Calculator** | Main design sheet. Enter parameters here; get all component values. |
 | **LPF Direct 5-poles** | 5-element Chebyshev LPF designed at the actual drain impedance R_opt. Linked automatically to the main sheet. |
-| **LPF Direct 7-poles** | 7-element Chebyshev LPF designed at R_opt for ≥14 dB additional stopband rejection vs. the 5-pole design. Linked automatically to the main sheet. |
+| **LPF Direct 7-pole** | 7-element Chebyshev LPF designed at R_opt for ≥14 dB additional stopband rejection vs. the 5-pole design. Linked automatically to the main sheet. |
 | **MOSFET Reference Table** | Datasheet parameters for 16 common MOSFETs used in HF Class-E designs. |
 
 ---
@@ -143,7 +143,7 @@ The calculator implements the **Sokal AACD 2001 closed-form equations** (QL-corr
 R = (Veff² / P_out) × 0.576801 × (1.0000086 − 0.414395/QL − 0.577501/QL² + 0.205967/QL³)
 ```
 
-where `Veff = Vcc − Vsat` (effective voltage swing).
+where `Veff = Vcc − ΔV − Vsat` (effective voltage swing; ΔV is the supply-wiring droop, typically 0 V).
 
 **C1 — Shunt Capacitor (Eq. 7, QL-corrected):**
 
@@ -241,6 +241,7 @@ In the **Class-E Calculator** sheet, edit the blue **INPUT PARAMETERS** cells:
 | ESR_C2 | C2 series ESR (Ω) | 0.01 |
 | ESR_C1 | C1 series ESR (Ω) | 0.01 |
 | ESR_RFC | RFC winding ESR (Ω) | 0.1 |
+| Z_in | Source/driver impedance (Ω) | 50 |
 | Z_out | Antenna/load impedance (Ω) | 50 |
 | Ciss | MOSFET Ciss from datasheet (pF) | 60 |
 | Coss | MOSFET Coss from datasheet (pF) | 12 |
@@ -357,7 +358,7 @@ Note: Under severe mistuning, V_pk can reach 5× Vcc. The sheet includes a worst
 Used internally in all component formulas.
 
 ### Optimum Load Resistance R
-The Class-E drain load impedance for which the circuit achieves ZVS + ZCS. This is **not** the antenna impedance (50 Ω) — it is the correct source impedance for the LPF. Typical: 5–50 Ω for HF QRP.
+The Class-E drain load impedance for which the circuit achieves ZVS + ZDVS. This is **not** the antenna impedance (50 Ω) — it is the correct source impedance for the LPF. Typical: 5–50 Ω for HF QRP.
 
 ### DC Supply Current I_dc
 ```
@@ -442,7 +443,7 @@ If the 5-element LPF fails the regulatory requirement (FCC −43 dBc, IARU −50
 
 ---
 
-## 10. Sheet 3 — LPF Direct 7-poles
+## 10. Sheet 3 — LPF Direct 7-pole
 
 This sheet computes a **7-element Chebyshev LPF** directly coupled to the drain, using R_opt as the source impedance. It provides approximately 14 dB more stopband rejection than the 5-pole design, targeting −65 dBc or better at 2f for strict IARU compliance. All parameters are automatically linked from the main sheet.
 
@@ -667,7 +668,7 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 
 2. **Sokal, N. O.** — "Class-E High-Efficiency RF/Microwave Power Amplifiers: Principles of Operation, Design Procedures, and Experimental Verification," in *Analog Circuit Design* (AACD 2001), Kluwer Academic, 2002. Available: https://people.eecs.berkeley.edu/~culler/AIIT/papers/radio/Sokal%20AACD5-poweramps.pdf
 
-3. **Sokal, N. O. and Sokal, A. D.** — "Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers," *IEEE Journal of Solid-State Circuits*, Vol. SC-10, No. 3, pp. 168–176, June 1975. *(Original patent/publication of the Class-E topology)*
+3. **Sokal, N. O. and Sokal, A. D.** — "Class E — A New Class of High-Efficiency Tuned Single-Ended Switching Power Amplifiers," *IEEE Journal of Solid-State Circuits*, Vol. SC-10, No. 3, pp. 168–176, June 1975. *(Original publication of the Class-E topology)*
 
 4. **Raab, F. H.** — "Idealized Operation of the Class E Tuned Power Amplifier," *IEEE Transactions on Circuits and Systems*, Vol. CAS-24, No. 12, pp. 725–735, December 1977.
 
