@@ -26,22 +26,25 @@
 6. [Input Parameters Explained](#6-input-parameters-explained)
 7. [Output / Calculated Values](#7-output--calculated-values)
 8. [Sheet 1 — Class-E Calculator](#8-sheet-1--class-e-calculator)
-9. [Sheet 2 — LPF Direct 5-poles](#9-sheet-2--lpf-direct-5-poles)
-10. [Sheet 3 — LPF Direct 7-pole](#10-sheet-3--lpf-direct-7-pole)
-11. [Sheet 4 — MOSFET Reference Table](#11-sheet-4--mosfet-reference-table)
-12. [Iterative Calculation: Why & How](#12-iterative-calculation-why--how)
-13. [Component Selection Guidelines](#13-component-selection-guidelines)
-    - [C1 — Shunt Capacitor](#131-c1--shunt-capacitor)
-    - [C2 — Series Resonant Capacitor](#132-c2--series-resonant-capacitor)
-    - [L2 — Series Resonant Inductor](#133-l2--series-resonant-inductor)
-    - [RFC — RF Choke](#134-rfc--rf-choke)
-    - [LPF Components](#135-lpf-components)
-14. [MOSFET Selection Guide](#14-mosfet-selection-guide)
-15. [Regulatory Compliance (Harmonics)](#15-regulatory-compliance-harmonics)
-16. [Simulation Workflow (LTspice)](#16-simulation-workflow-ltspice)
-17. [Known Limitations](#17-known-limitations)
-18. [References](#18-references)
-19. [Licence](#19-licence)
+9. [Sheet 2 — Parallel MOSFETs](#9-sheet-2--parallel-mosfets)
+10. [Sheet 3 — LPF Direct 5-poles](#10-sheet-3--lpf-direct-5-poles)
+11. [Sheet 4 — LPF Direct 7-pole](#11-sheet-4--lpf-direct-7-pole)
+12. [Sheet 5 — Schematic 5-pole LPF](#12-sheet-5--schematic-5-pole-lpf)
+13. [Sheet 6 — Schematic 7-pole LPF](#13-sheet-6--schematic-7-pole-lpf)
+14. [Sheet 7 — MOSFET Reference Table](#14-sheet-7--mosfet-reference-table)
+15. [Iterative Calculation: Why & How](#15-iterative-calculation-why--how)
+16. [Component Selection Guidelines](#16-component-selection-guidelines)
+    - [C1 — Shunt Capacitor](#161-c1--shunt-capacitor)
+    - [C2 — Series Resonant Capacitor](#162-c2--series-resonant-capacitor)
+    - [L2 — Series Resonant Inductor](#163-l2--series-resonant-inductor)
+    - [RFC — RF Choke](#164-rfc--rf-choke)
+    - [LPF Components](#165-lpf-components)
+17. [MOSFET Selection Guide](#17-mosfet-selection-guide)
+18. [Regulatory Compliance (Harmonics)](#18-regulatory-compliance-harmonics)
+19. [Simulation Workflow (LTspice)](#19-simulation-workflow-ltspice)
+20. [Known Limitations](#20-known-limitations)
+21. [References](#21-references)
+22. [License](#22-license)
 
 ---
 
@@ -79,18 +82,23 @@ This spreadsheet automates all of those calculations and adds:
 - **A full asymmetric 5-element Chebyshev LPF** designed at the correct source impedance R_opt (not 50 Ω) — Sheet 2
 - **A full asymmetric 7-element Chebyshev LPF** for stricter harmonic rejection (≥−65 dBc at 2f) — Sheet 3
 - **A curated MOSFET reference table** covering popular HF/VHF/VLF devices
+- **A Parallel MOSFETs scaling sheet** with full theory, gate drive analysis, and step-by-step modification procedure for N = 1 through 8 parallel devices
+- **Schematic sheets** with ASCII circuit diagrams and linked component tables for both 5-pole and 7-pole configurations
 
 ---
 
 ## 3. Spreadsheet Structure
 
-The workbook contains **four sheets**:
+The workbook contains **seven sheets**:
 
 | Sheet | Purpose |
 |---|---|
 | **Class-E Calculator** | Main design sheet. Enter parameters here; get all component values. |
+| **Parallel MOSFETs** | Power scaling for N parallel MOSFETs: theory, scaling equations, component re-calculation, gate drive requirements, and step-by-step modification procedure. |
 | **LPF Direct 5-poles** | 5-element Chebyshev LPF designed at the actual drain impedance R_opt. Linked automatically to the main sheet. |
 | **LPF Direct 7-pole** | 7-element Chebyshev LPF designed at R_opt for ≥14 dB additional stopband rejection vs. the 5-pole design. Linked automatically to the main sheet. |
+| **Schematic 5-pole LPF** | ASCII circuit diagram and linked component value table for the 5-pole direct-drain configuration. |
+| **Schematic 7-pole LPF** | ASCII circuit diagram and linked component value table for the 7-pole direct-drain configuration. |
 | **MOSFET Reference Table** | Datasheet parameters for 16 common MOSFETs used in HF Class-E designs. |
 
 ---
@@ -206,7 +214,7 @@ C_source = g2 / (R_opt × ωc)          [CORRECT]
 C_source = g2 / (50Ω × ωc)            [WRONG — makes C ≈2× too small, loses 10–20 dB at 2f]
 ```
 
-This is why the **LPF Direct (R_opt)** sheet computes an **asymmetric ladder** with Z_source = R_opt and Z_load = 50 Ω, using the geometric mean reference impedance `Z0_eff = √(R_opt × Z_load)` for the series inductors and independent scaling for each shunt capacitor.
+This is why the **LPF Direct 5-poles** sheet computes an **asymmetric ladder** with Z_source = R_opt and Z_load = 50 Ω, using the geometric mean reference impedance `Z0_eff = √(R_opt × Z_load)` for the series inductors and independent scaling for each shunt capacitor.
 
 The cutoff frequency is set to **fc = 1.40 × f** to keep fundamental insertion loss below 0.1 dB while providing useful harmonic rejection at 2f.
 
@@ -268,7 +276,7 @@ The **CLASS-E COMPONENT VALUES** section gives you:
 
 ### Step 5 — Read the LPF Values
 
-Switch to the **LPF Direct (R_opt)** sheet (Sheet 2) for the 5-element Chebyshev LPF, or the **LPF Direct 7-pole** sheet (Sheet 3) for higher harmonic rejection. Each sheet provides:
+Switch to the **LPF Direct 5-poles** sheet (Sheet 3) for the 5-element Chebyshev LPF, or the **LPF Direct 7-pole** sheet (Sheet 4) for higher harmonic rejection. Each sheet provides:
 - L1, L3, L5 (and L7 for the 7-pole) — series inductors
 - C2, C4 (and C6 for the 7-pole) — shunt capacitors
 - Estimated harmonic attenuation at 2f and 3f
@@ -322,6 +330,19 @@ The winding series resistance of the RF choke. RFC loss is approximately `ESR_RF
 - Air-core toroid: 0.05–0.1 Ω
 - Wound ferrite (HF): 0.1–0.5 Ω
 - Small ferrite pot cores: up to 1 Ω
+
+### Ciss — MOSFET Input Capacitance
+The total input capacitance of the MOSFET from the datasheet, measured at a specified Vds (typically 25 V). Ciss = Cgs + Cgd (gate-to-source plus gate-to-drain capacitances). It is used by the spreadsheet to estimate the gate drive power dissipation:
+```
+P_gate ≈ Ciss × Vgs_drive² × f
+```
+Higher Ciss demands more drive power from the gate driver. For QRP HF designs this is typically small compared to the RF output power, but becomes significant at VHF or when using large power MOSFETs. Typical values: 60–500 pF for small HF switching devices (BS170, IRF510); 500–5000 pF for large TO-247/TO-264 power MOSFETs.
+
+### Z_in — Source/Driver Impedance
+The output impedance of the RF signal source or gate driver circuit, in ohms. Typically 50 Ω for standard RF driver stages. This parameter is used on the main sheet for gate drive matching estimates. For a logic-level square-wave driver (e.g., 74HC gate or dedicated MOSFET driver IC), use the driver's specified output impedance, typically 5–50 Ω. The value does not affect the Class-E load-network calculations — it is informational for the gate drive section only.
+
+### Z_out — Antenna/Load Impedance
+The impedance of the antenna or load connected to the LPF output, in ohms. The standard value is 50 Ω, matching typical coaxial feedlines and antenna systems. This parameter defines Z_load for all LPF calculations on Sheets 2 and 3 — the filter is designed to transform R_opt (drain impedance) to Z_out. Entering a non-standard value (e.g., 75 Ω for cable systems) correctly recalculates the asymmetric LPF for that load impedance.
 
 ### Coss Scale Factor
 MOSFET output capacitance (Coss) is highly **bias-dependent** — it decreases sharply at higher Vds. The scale factor corrects the datasheet value (measured at a fixed Vds, typically 25 V) to the effective value at Vds ≈ 0.5 × Vcc:
@@ -402,11 +423,78 @@ This is the main design sheet. The layout is divided into sections:
 | **MOSFET RATING CHECKS** | V_DSS, I_D compliance with safety factors |
 | **LPF (50 Ω, main sheet)** | Optional L-network + 5-element LPF for use when not using the LPF Direct sheet |
 
-> **Note:** The main sheet also provides an L-network impedance transformer (from R_opt to 50 Ω) followed by a 50 Ω symmetric Chebyshev LPF. This is an alternative to the **LPF Direct (R_opt)** sheet — the two approaches should not be cascaded in series. Choose one or the other.
+> **Note:** The main sheet also provides an L-network impedance transformer (from R_opt to 50 Ω) followed by a 50 Ω symmetric Chebyshev LPF. This is an alternative to the **LPF Direct 5-poles** sheet — the two approaches should not be cascaded in series. Choose one or the other.
 
 ---
 
-## 9. Sheet 2 — LPF Direct 5-poles
+## 9. Sheet 2 — Parallel MOSFETs
+
+This sheet covers the theory and practice of using **N identical MOSFETs in parallel** to scale output power without increasing supply voltage or switching to a higher-rated device. All parameters are automatically linked from the main sheet.
+
+### Why parallel MOSFETs work in Class-E
+
+In Class-E, output power is given by P_out = Veff² × 0.5768 / R_opt (Sokal Eq. 6). To scale power ×N at the same Vcc — without needing higher V_DSS devices — R_opt must be divided by N. N identical MOSFETs in parallel form a composite device with R_ds(on)/N, Coss×N, and Ciss×N. This is exactly the condition required: the R_ds(on)/R_opt ratio remains invariant, so efficiency η is preserved. ZVS/ZDVS switching waveforms are maintained as long as the load network is re-tuned for R_opt/N.
+
+### Thermal advantage — dominant benefit for QRP designs
+
+Total power dissipation P_diss = Vcc × I_dc − P_out is fixed by efficiency and is independent of N. Each device dissipates only P_diss / N watts. For a typical BS170 design (P_out = 0.4 W, η ≈ 75%, P_diss ≈ 0.13 W): at N = 1 each device dissipates 0.13 W (approaching the 0.83 W TO-92 limit). At N = 4, each device dissipates only 0.033 W — far below the thermal limit, eliminating the need for a heatsink at any ambient temperature. This thermal benefit is often the primary reason to use N > 1.
+
+### Positive temperature coefficient — self-balancing
+
+MOSFETs in switching mode exhibit a positive R_ds(on) temperature coefficient (approximately +0.5%/°C for silicon). If one device runs hotter, its channel resistance rises, automatically reducing its share of the current. This is the opposite of BJT paralleling (negative V_be tempco → thermal runaway). Class-E parallel operation is inherently thermally stable.
+
+### Parameter scaling rules
+
+| Parameter | Single (N=1) | N Parallel | Scale |
+|---|---|---|---|
+| R_opt | R | R / N | ÷N |
+| P_out | P₀ | N × P₀ | ×N |
+| I_dc (total) | I₀ | N × I₀ | ×N |
+| C1 (total at drain node) | C1 | N × C1 | ×N |
+| L2 | L2 | L2 / N | ÷N |
+| C2 | C2 | N × C2 | ×N |
+| RFC inductance | RFC | RFC / N | ÷N |
+| V_pk | 3.562 × Vcc | 3.562 × Vcc | unchanged |
+| V_DSS requirement | same | same | unchanged |
+| I_pk per device | 2.862 × I₀ | 2.862 × I₀ | unchanged |
+| R_ds(on) composite | Rds | Rds / N | ÷N |
+| Gate capacitance (total) | Ciss | N × Ciss | ×N |
+
+A key insight is that N parallel MOSFETs contribute N×Coss_eff to the drain node, which often partially or fully supplies the increased C1 requirement — the parasitic Coss becomes a design feature rather than a correction.
+
+### Gate drive — the critical challenge
+
+The gate driver now sees N×Ciss in parallel. The gate RC time constant τ = R_gate × N×Ciss must satisfy τ/T < 5% of the switching period for clean transitions. For BS170 (Ciss = 60 pF) at 14 MHz:
+
+- N = 1–2: 74HC04 adequate (within 25 mA limit)
+- N = 2–4: TC4420 (6 A peak) or equivalent dedicated MOSFET driver IC
+- N = 3–4: TC4452 (12 A) or MCP1407
+- N ≥ 5: UCC27524, IXDN609, or a gate transformer (1:1 ferrite bifilar for symmetry)
+
+Per NXP AN11599 recommendations, always use a **split gate resistor topology**: an individual R_gate (3–10 Ω) at each MOSFET gate pin plus a common R_gate at the driver output. Individual resistors prevent the Miller plateau of the lowest-V_th device from clamping the others during switching transitions, and suppress parasitic oscillation between parallel gate loops.
+
+### PCB layout requirements
+
+- All gate traces must be equal length (±2 mm)
+- Source connections: individual Kelvin vias directly under the source pin of each device to the ground plane — shared return traces create common-source inductance causing current imbalance and ringing
+- C1 external capacitors: distribute one capacitor of value C1_ext/N at each device drain, placed as close as possible to the drain pin
+- Use star topology from driver IC to each gate resistor
+
+### Step-by-step modification procedure
+
+1. Choose N. V_DSS, I_D(cont), and I_D(pulsed) requirements are **unchanged** per device — the same MOSFET part number works for all N.
+2. On the main **Class-E Calculator** sheet, change P_out to N × P_out_original (keep Vcc fixed). Press F9 until η converges. Sokal Eq. 6 then automatically yields R_opt/N and all component values update.
+3. Update Ciss on the main sheet to N × Ciss_single. This recalculates the input matching inductor L_in and gate drive requirements.
+4. Read C1_ext from the Parallel MOSFETs scaling table. If C1_ext = 0, the N×Coss already fills C1 completely and no external shunt capacitor is needed.
+5. Wind a new L2 (÷N µH) on the same or a smaller toroid. Rewind the RFC with ÷N inductance on a **larger** core capable of carrying N×I_dc without saturation.
+6. Select the gate driver IC from the guidance table in the sheet.
+7. Verify the complete design in LTspice with N parallel MOSFET SPICE models before building for N ≥ 3.
+
+> ⚠ **Realistic power gain:** Due to gate drive losses (N×Ciss charging at HF), PCB trace parasitics, component tolerances, and layout inductance between devices, real-world power output is approximately 85–95% of the theoretical N×P_out value. The sheet labels this as the "realistic" figure.
+
+---
+
+## 10. Sheet 3 — LPF Direct 5-poles
 
 This sheet computes the **correct** 5-element Chebyshev LPF when the filter is connected **directly to the drain**, with no intermediate L-network. All parameters are automatically linked from the main sheet.
 
@@ -439,11 +527,11 @@ Note C2 ≠ C4 when R_opt ≠ Z_load (asymmetric terminations).
 
 The sheet provides estimated harmonic attenuation at 2f and 3f. These estimates assume an **ideal R_opt source** — in practice, the actual rejection will differ slightly depending on MOSFET output impedance at harmonic frequencies. Verify with LTspice simulation before final build.
 
-If the 5-element LPF fails the regulatory requirement (FCC −43 dBc, IARU −50 dBc), switch to the **LPF Direct 7-pole** sheet (Sheet 3), which uses a 7-element Chebyshev filter for ≥14 dB additional stopband rejection, or lower the cutoff frequency fc.
+If the 5-element LPF fails the regulatory requirement (FCC −43 dBc, IARU −50 dBc), switch to the **LPF Direct 7-pole** sheet (Sheet 4), which uses a 7-element Chebyshev filter for ≥14 dB additional stopband rejection, or lower the cutoff frequency fc.
 
 ---
 
-## 10. Sheet 3 — LPF Direct 7-pole
+## 11. Sheet 4 — LPF Direct 7-pole
 
 This sheet computes a **7-element Chebyshev LPF** directly coupled to the drain, using R_opt as the source impedance. It provides approximately 14 dB more stopband rejection than the 5-pole design, targeting −65 dBc or better at 2f for strict IARU compliance. All parameters are automatically linked from the main sheet.
 
@@ -480,11 +568,37 @@ The sheet provides estimated harmonic attenuation at 2f and 3f. These estimates 
 
 ⚠ **Asymmetric filter warning**: Attenuation formulas assume equal source termination at R_opt. For impedance ratios n = Z_load/R_opt > 1.5, actual stopband depth may differ ±3–6 dB from Chebyshev predictions. Verify with LTspice.
 
-> **Choosing between 5-pole and 7-pole:** Use the 5-pole (Sheet 2) for most QRP designs. Use the 7-pole (Sheet 3) when the 5-pole sheet flags 🚨 non-compliance, when stricter IARU margins are required, or when operating near 2f.
+> **Choosing between 5-pole and 7-pole:** Use the 5-pole (Sheet 3) for most QRP designs. Use the 7-pole (Sheet 4) when the 5-pole sheet flags 🚨 non-compliance, when stricter IARU margins are required, or when operating near 2f.
 
 ---
 
-## 11. Sheet 4 — MOSFET Reference Table
+## 12. Sheet 5 — Schematic 5-pole LPF
+
+This sheet provides a **ASCII circuit diagram** of the complete Class-E transmitter stage with the 5-pole direct-drain Chebyshev LPF, along with a linked component value table that reads directly from the main calculator and LPF sheets.
+
+The schematic shows the complete signal path from Vcc through the RFC choke to the MOSFET drain node, through the L2–C2 series resonant tank and the five-element LPF (L1, C2-shunt, L3, C4-shunt, L5), to the 50 Ω antenna load. Key notes embedded in the sheet:
+
+- C1 total = Coss_eff + C1_ext (subtract MOSFET Coss from the table value to find the external capacitor)
+- L2–C2 form the series resonant tank; L_ser is informational and built into L2 by design
+- LPF shunt capacitor C2 uses R_opt as source impedance (not 50 Ω); LPF shunt capacitor C4 uses Z_load = 50 Ω
+- All capacitors: NP0/C0G ceramic or silver-mica rated ≥ 2 × V_pk
+- All inductors: verify SRF > 10 × operating frequency
+
+---
+
+## 13. Sheet 6 — Schematic 7-pole LPF
+
+This sheet provides a **ASCII circuit diagram** of the complete Class-E transmitter stage with the 7-pole direct-drain Chebyshev LPF, along with a linked component value table reading from the main calculator and LPF sheets.
+
+The schematic extends the 5-pole topology with two additional elements: a third shunt capacitor (C6, scaled to Z_load = 50 Ω) and a fourth series inductor (L7). Key notes embedded in the sheet:
+
+- The 7-pole design provides approximately 14 dB more rejection than the 5-pole at all harmonics — preferred for FCC/IARU compliance
+- LPF C2 uses R_opt as source impedance; LPF C4 uses Z0_eff = √(R_opt × Z_load); LPF C6 uses Z_load = 50 Ω
+- The asymmetric filter uses three different capacitor scaling impedances corresponding to the source, geometric mean, and load terminations
+
+---
+
+## 14. Sheet 7 — MOSFET Reference Table
 
 A quick-reference table of 16 MOSFETs commonly used in HF Class-E designs. Columns:
 
@@ -520,7 +634,7 @@ A quick-reference table of 16 MOSFETs commonly used in HF Class-E designs. Colum
 
 ---
 
-## 12. Iterative Calculation: Why & How
+## 15. Iterative Calculation: Why & How
 
 ### The circular dependency
 
@@ -548,23 +662,23 @@ The RFC loss term `ESR_RFC × I_dc²` is typically a small fraction of P_out for
 
 ---
 
-## 13. Component Selection Guidelines
+## 16. Component Selection Guidelines
 
-### 13.1 C1 — Shunt Capacitor
+### 16.1 C1 — Shunt Capacitor
 
 - **Type:** NP0/C0G ceramic or silver-mica
 - **Voltage rating:** ≥2× V_pk (i.e. ≥ 2 × 3.56 × Vcc); use 100 V minimum for HF QRP
 - **Value:** Use standard E12/E24 value nearest to C1_ext. Slight deviation from optimum shifts the ZVS point but does not catastrophically fail the circuit
 - **Note:** The MOSFET's Coss (scaled) absorbs part of the required C1. Install only C1_ext as an external component
 
-### 13.2 C2 — Series Resonant Capacitor
+### 16.2 C2 — Series Resonant Capacitor
 
 - **Type:** Polypropylene film (WIMA FKP, MKP) or silver-mica
 - **Voltage rating:** ≥2× V_pk — this capacitor sees the full drain voltage swing
 - **Stability:** Use C0G/NP0 or polypropylene; avoid X7R/Z5U which drift with temperature and cause frequency instability
 - **Value:** Nearest 5% E-series value; small deviations can be absorbed by slightly adjusting L2
 
-### 13.3 L2 — Series Resonant Inductor
+### 16.3 L2 — Series Resonant Inductor
 
 - **Core:** T68-6 (yellow, mix 6) or T50-6 iron powder toroid for 7–30 MHz; T68-2 (red) for 1.8–10 MHz
 - **Wire:** Use appropriate AWG for I_rms (see LPF sheet for current rating guidance)
@@ -572,7 +686,7 @@ The RFC loss term `ESR_RFC × I_dc²` is typically a small fraction of P_out for
 - **SRF check:** Self-resonant frequency must be >10× operating frequency
 - **Verification:** Measure finished inductance with LCR meter or VNA at operating frequency before installation; trim by spreading/compressing turns
 
-### 13.4 RFC — RF Choke
+### 16.4 RFC — RF Choke
 
 - **Critical requirement:** SRF > 10× operating frequency (e.g. >70 MHz for a 7 MHz design)
 - **Core:** Ferrite mix 43 or 61 works well at HF; avoid iron powder for large RFC values (too lossy)
@@ -580,7 +694,7 @@ The RFC loss term `ESR_RFC × I_dc²` is typically a small fraction of P_out for
 - **Saturation:** Core must not saturate at the DC bias current I_dc; check manufacturer's AL values
 - **Practical rule:** RFC reactance must be ≥ 30× R; this spreadsheet uses 50× R for margin
 
-### 13.5 LPF Components
+### 16.5 LPF Components
 
 - **Inductors (L1, L3, L5 for 5-pole; L1, L3, L5, L7 for 7-pole):** T50-6 or T68-6 toroids; verify SRF > 10×f; wind to calculated µH value
 - **Capacitors (C2, C4):** NP0/C0G or silver-mica rated ≥ 2× V_pk (≥ 100 V for 5–15 V QRP designs)
@@ -589,7 +703,7 @@ The RFC loss term `ESR_RFC × I_dc²` is typically a small fraction of P_out for
 
 ---
 
-## 14. MOSFET Selection Guide
+## 17. MOSFET Selection Guide
 
 ### Minimum V_DSS
 ```
@@ -607,7 +721,7 @@ For efficient switching, the MOSFET's unity gain frequency fT should be ≥ 10×
 
 ---
 
-## 15. Regulatory Compliance (Harmonics)
+## 18. Regulatory Compliance (Harmonics)
 
 | Regulation | Harmonic limit |
 |---|---|
@@ -620,14 +734,14 @@ A 5-element Chebyshev LPF provides approximately:
 - 3rd harmonic (3f): −38 to −55 dBc
 
 For compliance at high power or strict IARU compliance, consider:
-1. Switching to the **7-element Chebyshev LPF** (Sheet 3 — LPF Direct 7-pole), which provides ≥14 dB additional rejection
+1. Switching to the **7-element Chebyshev LPF** (Sheet 4 — LPF Direct 7-pole), which provides ≥14 dB additional rejection
 2. Lowering fc from 1.40×f to 1.25×f (increases fundamental insertion loss slightly)
 3. Adding a separate **harmonic trap** (series LC to GND tuned to 2f or 3f)
 4. Verifying with a **spectrum analyser** — always measure before transmitting
 
 ---
 
-## 16. Simulation Workflow (LTspice)
+## 19. Simulation Workflow (LTspice)
 
 LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) is the recommended tool for pre-build validation. *(Note: if the URL above redirects, search "LTspice download Analog Devices" to find the current download page.)*
 
@@ -650,7 +764,7 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 
 ---
 
-## 17. Known Limitations
+## 20. Known Limitations
 
 - The **efficiency model** is based on the Sokal Eq. 2 linear ESR model. Nonlinear loss mechanisms (core hysteresis, skin effect at VHF, Coss loss) are partially accounted for via the Coss loss model (`p_coss = 0.5 × Coss_eff × V_pk² × f × k_coss`) but not fully modelled
 - The **harmonic attenuation estimates** in the LPF sheet assume an ideal resistive source at R_opt. Real MOSFET output impedance at harmonic frequencies is reactive and different from R_opt — always verify with simulation or measurement
@@ -662,7 +776,7 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 
 ---
 
-## 18. References
+## 21. References
 
 1. **Sokal, N. O.** — "Class-E RF Power Amplifiers," *QEX Magazine*, No. 204, Jan/Feb 2001, pp. 9–20. American Radio Relay League. *(Primary reference for all design equations in this calculator)*
 
@@ -696,9 +810,9 @@ LTspice (free from Analog Devices: https://www.analog.com/en/resources/design-to
 
 ---
 
-## 19. Licence
+## 22. License
 
-This spreadsheet and associated documentation are released under the **GNU General Public Licence v3 (GPL v3)**.
+This spreadsheet and associated documentation are released under the **GNU General Public License v3 (GPL v3)**.
 
 ```
 Copyright (C) LU3VEA — lu3vea@gmail.com

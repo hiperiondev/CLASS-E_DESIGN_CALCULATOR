@@ -26,22 +26,25 @@
 6. [Parámetros de Entrada Explicados](#6-parámetros-de-entrada-explicados)
 7. [Salidas / Valores Calculados](#7-salidas--valores-calculados)
 8. [Hoja 1 — Calculadora Clase-E](#8-hoja-1--calculadora-clase-e)
-9. [Hoja 2 — LPF Directo 5 Polos](#9-hoja-2--lpf-directo-5-polos)
-10. [Hoja 3 — LPF Directo 7 Polos](#10-hoja-3--lpf-directo-7-polos)
-11. [Hoja 4 — Tabla de Referencia de MOSFETs](#11-hoja-4--tabla-de-referencia-de-mosfets)
-12. [Cálculo Iterativo: Por Qué y Cómo](#12-cálculo-iterativo-por-qué-y-cómo)
-13. [Guía de Selección de Componentes](#13-guía-de-selección-de-componentes)
-    - [C1 — Capacitor de Derivación](#131-c1--capacitor-de-derivación)
-    - [C2 — Capacitor Resonante Serie](#132-c2--capacitor-resonante-serie)
-    - [L2 — Inductor Resonante Serie](#133-l2--inductor-resonante-serie)
-    - [RFC — Bobina de RF](#134-rfc--bobina-de-rf)
-    - [Componentes del LPF](#135-componentes-del-lpf)
-14. [Guía de Selección de MOSFET](#14-guía-de-selección-de-mosfet)
-15. [Cumplimiento Regulatorio (Armónicos)](#15-cumplimiento-regulatorio-armónicos)
-16. [Flujo de Trabajo de Simulación (LTspice)](#16-flujo-de-trabajo-de-simulación-ltspice)
-17. [Limitaciones Conocidas](#17-limitaciones-conocidas)
-18. [Referencias](#18-referencias)
-19. [Licencia](#19-licencia)
+9. [Hoja 2 — MOSFETs en Paralelo](#9-hoja-2--mosfets-en-paralelo)
+10. [Hoja 3 — LPF Directo 5 Polos](#10-hoja-3--lpf-directo-5-polos)
+11. [Hoja 4 — LPF Directo 7 Polos](#11-hoja-4--lpf-directo-7-polos)
+12. [Hoja 5 — Esquemático LPF 5 Polos](#12-hoja-5--esquemático-lpf-5-polos)
+13. [Hoja 6 — Esquemático LPF 7 Polos](#13-hoja-6--esquemático-lpf-7-polos)
+14. [Hoja 7 — Tabla de Referencia de MOSFETs](#14-hoja-7--tabla-de-referencia-de-mosfets)
+15. [Cálculo Iterativo: Por Qué y Cómo](#15-cálculo-iterativo-por-qué-y-cómo)
+16. [Guía de Selección de Componentes](#16-guía-de-selección-de-componentes)
+    - [C1 — Capacitor de Derivación](#161-c1--capacitor-de-derivación)
+    - [C2 — Capacitor Resonante Serie](#162-c2--capacitor-resonante-serie)
+    - [L2 — Inductor Resonante Serie](#163-l2--inductor-resonante-serie)
+    - [RFC — Bobina de RF](#164-rfc--bobina-de-rf)
+    - [Componentes del LPF](#165-componentes-del-lpf)
+17. [Guía de Selección de MOSFET](#17-guía-de-selección-de-mosfet)
+18. [Cumplimiento Regulatorio (Armónicos)](#18-cumplimiento-regulatorio-armónicos)
+19. [Flujo de Trabajo de Simulación (LTspice)](#19-flujo-de-trabajo-de-simulación-ltspice)
+20. [Limitaciones Conocidas](#20-limitaciones-conocidas)
+21. [Referencias](#21-referencias)
+22. [Licencia](#22-licencia)
 
 ---
 
@@ -79,18 +82,23 @@ Esta planilla automatiza todos esos cálculos y agrega:
 - **Un LPF Chebyshev asimétrico completo de 5 elementos** diseñado a la impedancia de fuente correcta R_opt (no 50 Ω) — Hoja 2
 - **Un LPF Chebyshev asimétrico completo de 7 elementos** para rechazo de armónicos más estricto (≥−65 dBc a 2f) — Hoja 3
 - **Una tabla de referencia de MOSFETs** con dispositivos populares HF/VHF/VLF
+- **Una hoja de escalado de MOSFETs en Paralelo** con teoría completa, análisis de excitación de puerta y procedimiento de modificación paso a paso para N = 1 a 8 dispositivos en paralelo
+- **Hojas de esquemático** con diagramas de circuito ASCII y tablas de componentes vinculados para ambas configuraciones de 5 y 7 polos
 
 ---
 
 ## 3. Estructura de la Planilla
 
-El libro de trabajo contiene **cuatro hojas**:
+El libro de trabajo contiene **siete hojas**:
 
 | Hoja | Propósito |
 |---|---|
 | **Calculadora Clase-E** | Hoja de diseño principal. Ingrese parámetros aquí; obtenga todos los valores de componentes. |
-| **LPF Directo 5 polos** | LPF Chebyshev de 5 elementos diseñado a la impedancia de drenador real R_opt. Vinculado automáticamente a la hoja principal. |
-| **LPF Directo 7 polos** | LPF Chebyshev de 7 elementos diseñado a R_opt para ≥14 dB de rechazo adicional en la banda de supresión vs. el diseño de 5 polos. Vinculado automáticamente a la hoja principal. |
+| **MOSFETs en Paralelo** | Escalado de potencia con N MOSFETs en paralelo: teoría, ecuaciones de escalado, recálculo de componentes, requisitos de excitación de puerta y procedimiento de modificación paso a paso. |
+| **LPF Directo 5 Polos** | LPF Chebyshev de 5 elementos diseñado a la impedancia de drenador real R_opt. Vinculado automáticamente a la hoja principal. |
+| **LPF Directo 7 Polos** | LPF Chebyshev de 7 elementos diseñado a R_opt para ≥14 dB de rechazo adicional en la banda de supresión vs. el diseño de 5 polos. Vinculado automáticamente a la hoja principal. |
+| **Esquemático LPF 5 Polos** | Diagrama de circuito ASCII y tabla de valores de componentes vinculados para la configuración de conexión directa al drenador de 5 polos. |
+| **Esquemático LPF 7 Polos** | Diagrama de circuito ASCII y tabla de valores de componentes vinculados para la configuración de conexión directa al drenador de 7 polos. |
 | **Tabla de Referencia de MOSFET** | Parámetros de hoja de datos para 16 MOSFETs comunes usados en diseños Clase-E HF. |
 
 ---
@@ -206,7 +214,7 @@ C_fuente = g2 / (R_opt × ωc)          [CORRECTO]
 C_fuente = g2 / (50Ω × ωc)            [INCORRECTO — hace C ≈2× muy pequeño, pierde 10–20 dB a 2f]
 ```
 
-Por esto, la hoja **LPF Directo (R_opt)** calcula una **escalera asimétrica** con Z_fuente = R_opt y Z_carga = 50 Ω, usando la impedancia de referencia media geométrica `Z0_ef = √(R_opt × Z_carga)` para los inductores serie y escalado independiente para cada capacitor de derivación.
+Por esto, la hoja **LPF Directo 5 Polos** calcula una **escalera asimétrica** con Z_fuente = R_opt y Z_carga = 50 Ω, usando la impedancia de referencia media geométrica `Z0_ef = √(R_opt × Z_carga)` para los inductores serie y escalado independiente para cada capacitor de derivación.
 
 La frecuencia de corte se establece en **fc = 1,40 × f** para mantener la pérdida de inserción del fundamental por debajo de 0,1 dB mientras se proporciona rechazo útil de armónicos a 2f.
 
@@ -268,7 +276,7 @@ La sección **VALORES DE COMPONENTES CLASE-E** le proporciona:
 
 ### Paso 5 — Leer los Valores del LPF
 
-Cambie a la hoja **LPF Directo (R_opt)** (Hoja 2) para el LPF Chebyshev de 5 elementos, o a la hoja **LPF Directo 7 polos** (Hoja 3) para mayor rechazo de armónicos. Cada hoja proporciona:
+Cambie a la hoja **LPF Directo 5 Polos** (Hoja 3) para el LPF Chebyshev de 5 elementos, o a la hoja **LPF Directo 7 Polos** (Hoja 4) para mayor rechazo de armónicos. Cada hoja proporciona:
 - L1, L3, L5 (y L7 para el de 7 polos) — inductores serie
 - C2, C4 (y C6 para el de 7 polos) — capacitores de derivación
 - Estimación de atenuación de armónicos a 2f y 3f
@@ -322,6 +330,19 @@ La resistencia serie del bobinado de la bobina de RF. La pérdida del RFC es apr
 - Toroide de núcleo de aire: 0,05–0,1 Ω
 - Ferrita devanada (HF): 0,1–0,5 Ω
 - Núcleos de ferrita pequeños: hasta 1 Ω
+
+### Ciss — Capacitancia de Entrada del MOSFET
+La capacitancia de entrada total del MOSFET de la hoja de datos, medida a un Vds específico (típicamente 25 V). Ciss = Cgs + Cgd (capacitancias puerta-fuente más puerta-drenador). La planilla usa este valor para estimar la potencia disipada en la excitación de puerta:
+```
+P_puerta ≈ Ciss × Vgs_excitación² × f
+```
+Un Ciss mayor requiere más potencia de excitación del circuito driver de puerta. Para diseños QRP HF, esto suele ser pequeño respecto a la potencia de salida, pero se vuelve significativo en VHF o con MOSFETs de alta potencia. Valores típicos: 60–500 pF para dispositivos de conmutación HF pequeños (BS170, IRF510); 500–5000 pF para MOSFETs de potencia en encapsulados TO-247/TO-264.
+
+### Z_in — Impedancia de Fuente/Excitador
+La impedancia de salida del excitador de señal RF o del circuito driver de puerta, en ohmios. Típicamente 50 Ω para etapas excitadoras RF estándar. Este parámetro se usa en la hoja principal para estimaciones de adaptación de la excitación de puerta. Para un driver de onda cuadrada a nivel lógico (p.ej. puerta 74HC o CI driver de MOSFET dedicado), use la impedancia de salida especificada por el fabricante, típicamente 5–50 Ω. Este valor no afecta los cálculos de la red de carga Clase-E — es informativo para la sección de excitación de puerta únicamente.
+
+### Z_out — Impedancia de Antena/Carga
+La impedancia de la antena o carga conectada a la salida del LPF, en ohmios. El valor estándar es 50 Ω, coincidiendo con los cables coaxiales y sistemas de antena típicos. Este parámetro define Z_carga para todos los cálculos del LPF en las Hojas 2 y 3 — el filtro se diseña para transformar R_opt (impedancia de drenador) a Z_out. Ingresar un valor no estándar (p.ej. 75 Ω para sistemas de cable) recalcula correctamente el LPF asimétrico para esa impedancia de carga.
 
 ### Factor de Escala de Coss
 La capacitancia de salida del MOSFET (Coss) es altamente **dependiente de la polarización** — disminuye bruscamente a mayor Vds. El factor de escala corrige el valor de la hoja de datos (medido a un Vds fijo, típicamente 25 V) al valor efectivo a Vds ≈ 0,5 × Vcc:
@@ -402,11 +423,71 @@ Esta es la hoja de diseño principal. El diseño está dividido en secciones:
 | **VERIFICACIONES DE CLASIFICACIÓN DEL MOSFET** | Conformidad V_DSS, I_D con factores de seguridad |
 | **LPF (50 Ω, hoja principal)** | Red L opcional + LPF de 5 elementos para usar cuando no se usa la hoja LPF Directo |
 
-> **Nota:** La hoja principal también proporciona un transformador de impedancia en red L (de R_opt a 50 Ω) seguido de un LPF Chebyshev simétrico de 50 Ω. Esta es una alternativa a la hoja **LPF Directo (R_opt)** — los dos enfoques **no deben** cascadearse en serie. Elija uno u otro.
+> **Nota:** La hoja principal también proporciona un transformador de impedancia en red L (de R_opt a 50 Ω) seguido de un LPF Chebyshev simétrico de 50 Ω. Esta es una alternativa a la hoja **LPF Directo 5 Polos** — los dos enfoques **no deben** cascadearse en serie. Elija uno u otro.
 
 ---
 
-## 9. Hoja 2 — LPF Directo 5 Polos
+## 9. Hoja 2 — MOSFETs en Paralelo
+
+Esta hoja cubre la teoría y práctica de usar **N MOSFETs idénticos en paralelo** para escalar la potencia de salida sin aumentar la tensión de alimentación ni cambiar a un dispositivo de mayor clasificación. Todos los parámetros están automáticamente vinculados desde la hoja principal.
+
+### Por qué funcionan los MOSFETs en paralelo en Clase-E
+
+En Clase-E, la potencia de salida es P_out = Veff² × 0,5768 / R_opt (Ec. 6 de Sokal). Para escalar la potencia ×N con el mismo Vcc — sin necesitar dispositivos con mayor V_DSS — R_opt debe dividirse por N. N MOSFETs idénticos en paralelo forman un dispositivo compuesto con R_ds(on)/N, Coss×N y Ciss×N. Esta es exactamente la condición requerida: la relación R_ds(on)/R_opt permanece invariante, por lo que la eficiencia η se preserva. Las formas de onda de conmutación ZVS/ZDVS se mantienen siempre que la red de carga se resintonice para R_opt/N.
+
+### Ventaja térmica — beneficio dominante en diseños QRP
+
+La disipación de potencia total P_diss = Vcc × I_dc − P_out está fijada por la eficiencia y es independiente de N. Cada dispositivo disipa únicamente P_diss / N vatios. Para un diseño típico con BS170 (P_out = 0,4 W, η ≈ 75%, P_diss ≈ 0,13 W): con N = 1 cada dispositivo disipa 0,13 W (aproximándose al límite de 0,83 W del TO-92). Con N = 4, cada dispositivo disipa solo 0,033 W — muy por debajo del límite térmico, eliminando la necesidad de disipadores a cualquier temperatura ambiente. Esta ventaja térmica es frecuentemente la razón principal para usar N > 1.
+
+### Coeficiente de temperatura positivo — autoequilibrio
+
+Los MOSFETs en modo de conmutación exhiben un coeficiente de temperatura positivo de R_ds(on) (aproximadamente +0,5%/°C para silicio). Si un dispositivo se calienta más, su resistencia de canal aumenta, reduciendo automáticamente su parte de la corriente. Esto es lo opuesto al paralelo de BJTs (tempco negativo de V_be → desbordamiento térmico). La operación en paralelo Clase-E es inherentemente estable térmicamente.
+
+### Reglas de escalado de parámetros
+
+| Parámetro | Individual (N=1) | N en Paralelo | Escala |
+|---|---|---|---|
+| R_opt | R | R / N | ÷N |
+| P_out | P₀ | N × P₀ | ×N |
+| I_dc (total) | I₀ | N × I₀ | ×N |
+| C1 (total en nodo drenador) | C1 | N × C1 | ×N |
+| L2 | L2 | L2 / N | ÷N |
+| C2 | C2 | N × C2 | ×N |
+| RFC inductancia | RFC | RFC / N | ÷N |
+| V_pk | 3,562 × Vcc | 3,562 × Vcc | sin cambio |
+| Requisito V_DSS | igual | igual | sin cambio |
+| I_pk por dispositivo | 2,862 × I₀ | 2,862 × I₀ | sin cambio |
+| R_ds(on) compuesto | Rds | Rds / N | ÷N |
+| Capacitancia de puerta (total) | Ciss | N × Ciss | ×N |
+
+Un aspecto clave es que N MOSFETs en paralelo contribuyen N×Coss_ef al nodo drenador, lo que frecuentemente cubre parcial o totalmente el mayor requisito de C1 — el Coss parásito se convierte en una característica de diseño.
+
+### Excitación de puerta — el desafío crítico
+
+El controlador de puerta ahora ve N×Ciss en paralelo. La constante de tiempo RC de puerta τ = R_puerta × N×Ciss debe satisfacer τ/T < 5% del período de conmutación para transiciones limpias. Para BS170 (Ciss = 60 pF) a 14 MHz:
+
+- N = 1–2: 74HC04 adecuado (dentro del límite de 25 mA)
+- N = 2–4: TC4420 (6 A pico) o CI controlador de MOSFET dedicado equivalente
+- N = 3–4: TC4452 (12 A) o MCP1407
+- N ≥ 5: UCC27524, IXDN609, o transformador de puerta (ferrita bifilar 1:1 para simetría)
+
+Per las recomendaciones de NXP AN11599, utilice siempre una **topología de resistor de puerta dividida**: un R_puerta individual (3–10 Ω) en cada pin de puerta del MOSFET más un R_puerta común en la salida del controlador.
+
+### Procedimiento de modificación paso a paso
+
+1. Elija N. Los requisitos de V_DSS, I_D(cont) e I_D(pulsado) no cambian por dispositivo — el mismo número de parte de MOSFET funciona para todos los valores de N.
+2. En la hoja principal **Calculadora Clase-E**, cambie P_out a N × P_out_original (mantenga Vcc fijo). Presione F9 hasta que η converja. La Ec. 6 de Sokal entonces automáticamente entrega R_opt/N y todos los valores de componentes se actualizan.
+3. Actualice Ciss en la hoja principal a N × Ciss_individual. Esto recalcula el inductor de adaptación de entrada L_in y los requisitos de excitación de puerta.
+4. Lea C1_ext de la tabla de escalado de MOSFETs en Paralelo. Si C1_ext = 0, el N×Coss ya llena C1 completamente y no se necesita capacitor de derivación externo.
+5. Devane un nuevo L2 (÷N µH) en el mismo toroide o uno más pequeño. Rebobine el RFC con ÷N de inductancia en un núcleo **más grande** capaz de transportar N×I_dc sin saturarse.
+6. Seleccione el CI controlador de puerta de la tabla de orientación en la hoja.
+7. Verifique el diseño completo en LTspice con N modelos SPICE de MOSFET en paralelo antes de construir para N ≥ 3.
+
+> ⚠ **Ganancia de potencia realista:** Debido a pérdidas de excitación de puerta (carga de N×Ciss en HF), parásitos de trazas de PCB, tolerancias de componentes e inductancia de interconexión entre dispositivos, la potencia de salida real es aproximadamente el 85–95% del valor teórico de N×P_out.
+
+---
+
+## 10. Hoja 3 — LPF Directo 5 Polos
 
 Esta hoja calcula el LPF Chebyshev **correcto** de 5 elementos cuando el filtro está conectado **directamente al drenador**, sin red L intermedia. Todos los parámetros están automáticamente vinculados desde la hoja principal.
 
@@ -439,11 +520,11 @@ Tenga en cuenta que C2 ≠ C4 cuando R_opt ≠ Z_carga (terminaciones asimétric
 
 La hoja proporciona estimaciones de atenuación de armónicos a 2f y 3f. Estas estimaciones asumen una **fuente resistiva ideal R_opt** — en la práctica, el rechazo real diferirá ligeramente dependiendo de la impedancia de salida del MOSFET a frecuencias armónicas. Verifique con simulación LTspice antes de la construcción final.
 
-Si el LPF de 5 elementos no cumple el requisito regulatorio (FCC −43 dBc, IARU −50 dBc), cambie a la hoja **LPF Directo 7 polos** (Hoja 3), que usa un filtro Chebyshev de 7 elementos para ≥14 dB de rechazo adicional en la banda de supresión, o baje la frecuencia de corte fc.
+Si el LPF de 5 elementos no cumple el requisito regulatorio (FCC −43 dBc, IARU −50 dBc), cambie a la hoja **LPF Directo 7 Polos** (Hoja 4), que usa un filtro Chebyshev de 7 elementos para ≥14 dB de rechazo adicional en la banda de supresión, o baje la frecuencia de corte fc.
 
 ---
 
-## 10. Hoja 3 — LPF Directo 7 Polos
+## 11. Hoja 4 — LPF Directo 7 Polos
 
 Esta hoja calcula un **LPF Chebyshev de 7 elementos** acoplado directamente al drenador, usando R_opt como impedancia de fuente. Proporciona aproximadamente 14 dB más de rechazo en la banda de supresión que el diseño de 5 polos, apuntando a −65 dBc o mejor a 2f para cumplimiento estricto de la IARU. Todos los parámetros están automáticamente vinculados desde la hoja principal.
 
@@ -480,11 +561,37 @@ La hoja proporciona estimaciones de atenuación de armónicos a 2f y 3f. Estas e
 
 ⚠ **Advertencia de filtro asimétrico**: Las fórmulas de atenuación asumen terminación de fuente igual a R_opt. Para relaciones de impedancia n = Z_carga/R_opt > 1,5, la profundidad real de la banda de supresión puede diferir ±3–6 dB de las predicciones de Chebyshev. Verifique con LTspice.
 
-> **Elegir entre 5 polos y 7 polos:** Use los 5 polos (Hoja 2) para la mayoría de los diseños QRP. Use los 7 polos (Hoja 3) cuando la hoja de 5 polos marque incumplimiento 🚨, cuando se requieran márgenes IARU más estrictos, o cuando opere cerca de 2f.
+> **Elegir entre 5 polos y 7 polos:** Use los 5 polos (Hoja 3) para la mayoría de los diseños QRP. Use los 7 polos (Hoja 4) cuando la hoja de 5 polos marque incumplimiento 🚨, cuando se requieran márgenes IARU más estrictos, o cuando opere cerca de 2f.
 
 ---
 
-## 11. Hoja 4 — Tabla de Referencia de MOSFET
+## 12. Hoja 5 — Esquemático LPF 5 Polos
+
+Esta hoja proporciona un **diagrama de circuito ASCII** de la etapa completa del transmisor Clase-E con el LPF Chebyshev de 5 polos de conexión directa al drenador, junto con una tabla de valores de componentes vinculados que se lee directamente desde la calculadora principal y las hojas de LPF.
+
+El esquemático muestra la trayectoria de señal completa desde Vcc a través de la bobina RFC hasta el nodo drenador del MOSFET, pasando por la red resonante serie L2-C2 y el LPF de cinco elementos (L1, C2-derivación, L3, C4-derivación, L5), hasta la carga de antena de 50 Ω. Notas clave incorporadas en la hoja:
+
+- C1 total = Coss_ef + C1_ext (reste el Coss del MOSFET del valor de la tabla para encontrar el capacitor externo)
+- L2–C2 forman el tanque resonante serie; L_ser es informativo y está incorporado en L2 por diseño
+- El capacitor de derivación LPF C2 usa R_opt como impedancia de fuente (no 50 Ω); LPF C4 usa Z_carga = 50 Ω
+- Todos los capacitores: cerámica NP0/C0G o mica plateada clasificados ≥ 2 × V_pk
+- Todos los inductores: verifique FRA > 10 × frecuencia de operación
+
+---
+
+## 13. Hoja 6 — Esquemático LPF 7 Polos
+
+Esta hoja proporciona un **diagrama de circuito ASCII** de la etapa completa del transmisor Clase-E con el LPF Chebyshev de 7 polos de conexión directa al drenador, junto con una tabla de valores de componentes vinculados.
+
+El esquemático extiende la topología de 5 polos con dos elementos adicionales: un tercer capacitor de derivación (C6, escalado a Z_carga = 50 Ω) y un cuarto inductor serie (L7). Notas clave incorporadas en la hoja:
+
+- El diseño de 7 polos proporciona aproximadamente 14 dB más de rechazo que el de 5 polos en todos los armónicos — preferido para cumplimiento FCC/IARU
+- LPF C2 usa R_opt como impedancia de fuente; LPF C4 usa Z0_ef = √(R_opt × Z_carga); LPF C6 usa Z_carga = 50 Ω
+- El filtro asimétrico usa tres diferentes impedancias de escalado de capacitores correspondientes a las terminaciones de fuente, media geométrica y carga
+
+---
+
+## 14. Hoja 7 — Tabla de Referencia de MOSFET
 
 Una tabla de referencia rápida de 16 MOSFETs comúnmente usados en diseños Clase-E HF. Columnas:
 
@@ -520,7 +627,7 @@ Una tabla de referencia rápida de 16 MOSFETs comúnmente usados en diseños Cla
 
 ---
 
-## 12. Cálculo Iterativo: Por Qué y Cómo
+## 15. Cálculo Iterativo: Por Qué y Cómo
 
 ### La dependencia circular
 
@@ -548,23 +655,23 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 
 ---
 
-## 13. Guía de Selección de Componentes
+## 16. Guía de Selección de Componentes
 
-### 13.1 C1 — Capacitor de Derivación
+### 16.1 C1 — Capacitor de Derivación
 
 - **Tipo:** Cerámica NP0/C0G o mica plateada
 - **Clasificación de tensión:** ≥2× V_pk (es decir, ≥ 2 × 3,56 × Vcc); use 100 V mínimo para HF QRP
 - **Valor:** Use el valor estándar E12/E24 más cercano a C1_ext. Una ligera desviación del óptimo desplaza el punto ZVS pero no falla catastróficamente el circuito
 - **Nota:** El Coss del MOSFET (escalado) absorbe parte del C1 requerido. Instale solo C1_ext como componente externo
 
-### 13.2 C2 — Capacitor Resonante Serie
+### 16.2 C2 — Capacitor Resonante Serie
 
 - **Tipo:** Película de polipropileno (WIMA FKP, MKP) o mica plateada
 - **Clasificación de tensión:** ≥2× V_pk — este capacitor ve la excursión completa de tensión del drenador
 - **Estabilidad:** Use C0G/NP0 o polipropileno; evite X7R/Z5U que derivan con la temperatura y causan inestabilidad de frecuencia
 - **Valor:** Valor de serie E de 5% más cercano; las pequeñas desviaciones pueden absorberlas ajustando ligeramente L2
 
-### 13.3 L2 — Inductor Resonante Serie
+### 16.3 L2 — Inductor Resonante Serie
 
 - **Núcleo:** T68-6 (amarillo, mezcla 6) o toroide de polvo de hierro T50-6 para 7–30 MHz; T68-2 (rojo) para 1,8–10 MHz
 - **Hilo:** Use AWG apropiado para I_rms (vea la hoja del LPF para orientación sobre clasificación de corriente)
@@ -572,7 +679,7 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 - **Verificación de FRA:** La frecuencia de auto-resonancia debe ser >10× la frecuencia de operación
 - **Verificación:** Mida la inductancia terminada con medidor LCR o VNA a la frecuencia de operación antes de la instalación; ajuste separando/comprimiendo las vueltas
 
-### 13.4 RFC — Bobina de RF
+### 16.4 RFC — Bobina de RF
 
 - **Requisito crítico:** FRA > 10× la frecuencia de operación (p.ej. >70 MHz para un diseño de 7 MHz)
 - **Núcleo:** La ferrita mezcla 43 o 61 funciona bien en HF; evite el polvo de hierro para valores RFC grandes (demasiadas pérdidas a estas frecuencias)
@@ -580,7 +687,7 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 - **Saturación:** El núcleo no debe saturarse a la corriente de polarización DC I_dc; verifique los valores AL del fabricante
 - **Regla práctica:** La reactancia del RFC debe ser ≥ 30× R; esta planilla usa 50× R para margen
 
-### 13.5 Componentes del LPF
+### 16.5 Componentes del LPF
 
 - **Inductores (L1, L3, L5 para 5 polos; L1, L3, L5, L7 para 7 polos):** Toroides T50-6 o T68-6; verifique FRA > 10×f; devane al valor calculado en µH
 - **Capacitores (C2, C4):** NP0/C0G o mica plateada clasificados ≥ 2× V_pk (≥ 100 V para diseños QRP de 5–15 V)
@@ -589,7 +696,7 @@ El término de pérdida del RFC `ESR_RFC × I_dc²` es típicamente una pequeña
 
 ---
 
-## 14. Guía de Selección de MOSFET
+## 17. Guía de Selección de MOSFET
 
 ### V_DSS Mínimo
 ```
@@ -607,7 +714,7 @@ Para conmutación eficiente, la frecuencia de ganancia unidad fT del MOSFET debe
 
 ---
 
-## 15. Cumplimiento Regulatorio (Armónicos)
+## 18. Cumplimiento Regulatorio (Armónicos)
 
 | Regulación | Límite de armónicos |
 |---|---|
@@ -620,14 +727,14 @@ Un LPF Chebyshev de 5 elementos proporciona aproximadamente:
 - 3° armónico (3f): −38 a −55 dBc
 
 Para cumplimiento a alta potencia o cumplimiento estricto de la IARU, considere:
-1. Cambiar al **LPF Chebyshev de 7 elementos** (Hoja 3 — LPF Directo 7 polos), que proporciona ≥14 dB de rechazo adicional
+1. Cambiar al **LPF Chebyshev de 7 elementos** (Hoja 4 — LPF Directo 7 Polos), que proporciona ≥14 dB de rechazo adicional
 2. Bajar fc de 1,40×f a 1,25×f (aumenta ligeramente la pérdida de inserción del fundamental)
 3. Agregar una **trampa de armónicos** separada (LC serie a GND sintonizado a 2f o 3f)
 4. Verificar con un **analizador de espectro** — siempre mida antes de transmitir
 
 ---
 
-## 16. Flujo de Trabajo de Simulación (LTspice)
+## 19. Flujo de Trabajo de Simulación (LTspice)
 
 LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) es la herramienta recomendada para validación previa a la construcción. *(Nota: si la URL redirige, busque "LTspice download Analog Devices" para encontrar la página de descarga actual.)*
 
@@ -650,7 +757,7 @@ LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-
 
 ---
 
-## 17. Limitaciones Conocidas
+## 20. Limitaciones Conocidas
 
 - El **modelo de eficiencia** está basado en el modelo lineal de ESR de la Ec. 2 de Sokal. Los mecanismos de pérdida no lineales (histéresis del núcleo, efecto pelicular en VHF, pérdida de Coss) están parcialmente considerados a través del modelo de pérdida de Coss (`p_coss = 0,5 × Coss_ef × V_pk² × f × k_coss`) pero no completamente modelados
 - Las **estimaciones de atenuación de armónicos** en la hoja del LPF asumen una fuente resistiva ideal a R_opt. La impedancia de salida real del MOSFET a frecuencias armónicas es reactiva y diferente de R_opt — siempre verifique con simulación o medición
@@ -662,7 +769,7 @@ LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-
 
 ---
 
-## 18. Referencias
+## 21. Referencias
 
 1. **Sokal, N. O.** — "Class-E RF Power Amplifiers," *QEX Magazine*, No. 204, Ene/Feb 2001, pp. 9–20. American Radio Relay League. *(Referencia primaria para todas las ecuaciones de diseño en esta calculadora)*
 
@@ -696,7 +803,7 @@ LTspice (gratuito de Analog Devices: https://www.analog.com/en/resources/design-
 
 ---
 
-## 19. Licencia
+## 22. Licencia
 
 Esta planilla y la documentación asociada se distribuyen bajo la **Licencia Pública General GNU v3 (GPL v3)**.
 
